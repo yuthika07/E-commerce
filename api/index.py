@@ -21,7 +21,24 @@ def products():
 @app.route('/cart')
 def cart():
     return render_template('cart.html')
+    
+@app.route('/add-to-cart/<int:product_id>')
+def add_to_cart(product_id):
+    cart = session.get('cart', [])
 
+    for product in PRODUCTS:
+        if product['id'] == product_id:
+            cart.append(product)
+            break
+
+    session['cart'] = cart
+    return redirect(url_for('cart'))
+@app.route('/cart')
+def cart():
+    cart_items = session.get('cart', [])
+    total = sum(item['price'] for item in cart_items)
+    return render_template('cart.html', cart_items=cart_items, total=total)
+    
 @app.route('/contact')
 def contact():
     return render_template('contact.html')
