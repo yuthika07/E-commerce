@@ -2,38 +2,25 @@
 
 {% block title %}Cart - E-Commerce Store{% endblock %}
 
-{% block extra_css %}
-<style>
-    .cart-container {
-        max-width: 600px;
-    }
-    .cart-empty {
-        text-align: center;
-        padding: 2rem;
-    }
-    .checkout-btn {
-        background-color: #27ae60;
-        color: white;
-        border: none;
-        padding: 0.75rem 1.5rem;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 1rem;
-        margin-top: 1rem;
-    }
-    .checkout-btn:hover {
-        background-color: #229954;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
 <div class="cart-container">
     <h1>Shopping Cart</h1>
-    <div class="cart-empty">
-        <p>Your cart is empty</p>
-        <a href="/products" style="color: #3498db;">Continue Shopping</a>
-    </div>
-    <button class="checkout-btn" disabled>Checkout</button>
+
+    {% if cart_items %}
+        {% for item in cart_items %}
+            <div class="product-card" style="margin-bottom: 1rem;">
+                <h3>{{ item.name }}</h3>
+                <p>${{ "%.2f"|format(item.price) }}</p>
+            </div>
+        {% endfor %}
+
+        <h2>Total: ${{ "%.2f"|format(total) }}</h2>
+        <button class="checkout-btn">Checkout</button>
+    {% else %}
+        <div class="cart-empty">
+            <p>Your cart is empty</p>
+            <a href="/products" style="color: #3498db;">Continue Shopping</a>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
