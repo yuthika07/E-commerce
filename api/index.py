@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.secret_key = "ecommerce123securekey"
 
@@ -18,12 +19,6 @@ def home():
 def products():
     return render_template('products.html', products=PRODUCTS)
 
-@app.route('/cart')
-def cart():
-    cart_items = session.get('cart', [])
-    total = sum(item['price'] for item in cart_items)
-    return render_template('cart.html', cart_items=cart_items, total=total)
-    
 @app.route('/add-to-cart/<int:product_id>')
 def add_to_cart(product_id):
     cart = session.get('cart', [])
@@ -35,12 +30,13 @@ def add_to_cart(product_id):
 
     session['cart'] = cart
     return redirect(url_for('cart'))
+
 @app.route('/cart')
 def cart():
     cart_items = session.get('cart', [])
     total = sum(item['price'] for item in cart_items)
     return render_template('cart.html', cart_items=cart_items, total=total)
-    
+
 @app.route('/contact')
 def contact():
     return render_template('contact.html')
