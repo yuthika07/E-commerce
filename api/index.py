@@ -20,7 +20,9 @@ def products():
 
 @app.route('/cart')
 def cart():
-    return render_template('cart.html')
+    cart_items = session.get('cart', [])
+    total = sum(item['price'] for item in cart_items)
+    return render_template('cart.html', cart_items=cart_items, total=total)
     
 @app.route('/add-to-cart/<int:product_id>')
 def add_to_cart(product_id):
